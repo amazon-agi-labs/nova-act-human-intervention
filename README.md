@@ -46,6 +46,8 @@ Understanding these core technologies will help you work with the Human Interven
 
 - **DynamoDB**: A NoSQL database that stores intervention execution state. Each pattern instance is tracked with atomic updates to prevent duplicate submissions and Time-To-Live (TTL) attributes for automatic cleanup after 24 hours. DynamoDB Streams trigger Lambda functions when records expire, enabling immediate S3 cleanup.
 
+- **Amazon DCV (Desktop Cloud Visualization)**: A high-performance remote display protocol for secure browser streaming, formerly known as NICE DCV. The [Amazon DCV Web Client SDK](https://docs.aws.amazon.com/dcv/latest/websdkguide/what-is.html) is a JavaScript library that enables real-time remote desktop and application streaming directly in web browsers. In the UI Takeover pattern, DCV streams the live browser session from Amazon Bedrock AgentCore to the human operator's browser, transmitting only encrypted pixels (not data) over WebSocket connections. The SDK supports mouse, keyboard, and touch input, allowing users to interact with the remote browser as if it were running locally.
+
 ## Quick Start
 
 ### 1. Set Up Python SDK (Development)
