@@ -1,0 +1,12 @@
+# Build outputs
+dist/
+build/
+cdk.out/
+*.js
+*.d.ts
+
+# Dependencies
+node_modules/
+
+# Lambda deployment packages
+lambda-packages/

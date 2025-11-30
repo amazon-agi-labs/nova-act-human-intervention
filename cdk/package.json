@@ -1,0 +1,56 @@
+{
+  "name": "nova-act-human-intervention-cdk",
+  "version": "1.0.0",
+  "description": "AWS CDK constructs for NovaAct Human Intervention workflows with WebSocket API, Step Functions, and SPA generation",
+  "main": "dist/lib/index.js",
+  "types": "dist/types/lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist node_modules",
+    "lint": "eslint --cache lib && prettier --list-different --cache .",
+    "format": "eslint --fix --cache lib && prettier --write --cache .",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "constructs",
+    "human-intervention",
+    "websocket",
+    "step-functions",
+    "nova-act",
+    "hitl",
+    "human-in-the-loop"
+  ],
+  "author": "AWS",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.14.0",
+    "constructs": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "aws-cdk": "^2.1031.0",
+    "aws-cdk-lib": "^2.221.0",
+    "constructs": "^10.4.2",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.9.0"
+  },
+  "files": [
+    "dist/lib/**/*",
+    "dist/types/**/*",
+    "lambda-packages/**/*",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aws-samples/nova-act-human-intervention-cdk.git"
+  }
+}

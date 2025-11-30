@@ -1,0 +1,13 @@
+/build
+/dist
+package-lock.json
+
+# Lambda deployment packages
+lambda-packages/
+
+# CDK generated files
+cdk.out/
+cdk.context.json
+
+# Dependencies
+node_modules/

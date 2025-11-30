@@ -1,0 +1,20 @@
+# Dependencies for amzn-nova-act-human-intervention (service) package
+
+# AWS Lambda utilities (amzn_nova_act_human_intervention)
+aws-lambda-powertools==3.7.0
+
+# AWS SDK (amzn_nova_act_human_intervention, amzn_nova_act_human_intervention_common)
+boto3>=1.40.39
+botocore>=1.40.39
+
+# Data validation (amzn_nova_act_human_intervention, amzn_nova_act_human_intervention_common)
+pydantic>=2.10.6
+
+# Browser session support (amzn_nova_act_human_intervention)
+bedrock-agentcore==1.0.5
+
+# Slack integration (amzn_nova_act_human_intervention)
+slack-bolt==1.25.0
+
+# Template rendering (amzn_nova_act_human_intervention)
+jinja2==3.1.5

@@ -1,0 +1,30 @@
+{
+    "display_information": {
+        "name": "Amazon Nova Act Pending Human Approval"
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "Amazon Nova Act Pending Human Approval",
+            "always_online": false
+        }
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "chat:write",
+                "chat:write.customize",
+                "links:write",
+                "channels:read"
+            ]
+        }
+    },
+    "settings": {
+        "interactivity": {
+            "is_enabled": true,
+            "request_url": "https://httpbin.dev/status/200"
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "token_rotation_enabled": false
+    }
+}

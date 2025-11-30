@@ -1,0 +1,61 @@
+node_modules/
+
+dist/
+*.js
+*.d.ts
+*.d.ts.map
+!jest.config.js
+
+cdk.out/
+.cdk.staging/
+cdk.context.json
+
+*.log
+npm-debug.log*
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+.DS_Store
+Thumbs.db
+
+coverage/
+.nyc_output/
+
+# Lambda deployment packages (generated locally, not for external distribution)
+lambda-packages/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Build artifacts
+/build/
+*.egg-info/
+
+# Testing and coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Linting
+.ruff_cache/
