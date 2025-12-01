@@ -252,6 +252,45 @@ notification_recipients=[
 
 ## Integration with Nova Act
 
+### Amazon Bedrock AgentCore Browser Sessions
+
+When integrating with Nova Act, you'll use [Amazon Bedrock AgentCore Browser](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-tool.html) to provide a secure, cloud-based browser environment for your agent workflows. The AgentCore Browser is a fully managed service that enables AI agents to interact with websites, fill forms, navigate web applications, and extract information.
+
+The `browser_session` context manager from `bedrock_agentcore.tools.browser_client` provides:
+
+- **Managed Browser Sessions**: Automatically creates and tears down cloud-based browser instances
+- **WebSocket Connectivity**: Generates WebSocket URLs and headers for Chrome DevTools Protocol (CDP) connections
+- **Session Management**: Handles browser session lifecycle, including timeout configuration and cleanup
+- **DCV Streaming**: Enables live browser streaming for UI Takeover patterns via Amazon DCV protocol
+
+**Basic Usage:**
+
+```python
+from bedrock_agentcore.tools.browser_client import browser_session
+
+with browser_session(aws_region) as agent_core_browser:
+    # Get WebSocket URL and headers for CDP connection
+    ws_url, headers = agent_core_browser.generate_ws_headers()
+
+    # Get the browser session ID (used for UI Takeover patterns)
+    session_id = agent_core_browser.session_id
+
+    # Use with Nova Act or other browser automation tools
+    # The browser session remains active within this context
+```
+
+**Key Properties:**
+- `session_id`: Unique identifier for the browser session (required for UI Takeover patterns)
+- `generate_ws_headers()`: Returns WebSocket URL and authentication headers for CDP connections
+- Automatically starts the browser session on context entry and stops it on exit
+
+For more details, see:
+- [Starting a browser session](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-start-session.html)
+- [Get Browser session](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-session-get.html)
+- [Using AgentCore Browser with other tools](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-building-agents.html)
+
+### Nova Act Callbacks Implementation
+
 The client library can be integrated with Nova Act through callbacks:
 
 ```python
@@ -348,14 +387,40 @@ class NovaActHumanInputCallbacks(HumanInputCallbacksBase):
         )
 
 # Use with Nova Act
-callbacks = NovaActHumanInputCallbacks(browser_session_id="<browser-session-id>")
+from bedrock_agentcore.tools.browser_client import browser_session
+from nova_act.nova_act import Workflow
 
-with NovaAct(
-    starting_page="https://www.example.com",
-    human_input_callbacks=callbacks,
-    nova_act_api_key="your-api-key",
-) as nova:
-    nova.act("Complete the purchase, but ask for approval before confirming")
+aws_region = "<region you have deployed the service to>"
+workflow_boto_session_args = {"region_name": aws_region}
+
+with browser_session(aws_region) as agent_core_browser:
+    ws_url, headers = agent_core_browser.generate_ws_headers()
+    with Workflow(
+        boto_session_kwargs=workflow_boto_session_args,
+        model_id="nova-act-latest",
+        workflow_definition_name="nova-act-hitl-example",
+    ) as workflow:
+        callbacks = NovaActHumanInputCallbacks(
+            workflow_run_id=workflow.workflow_run_id,
+            aws_region=aws_region,
+            executor_endpoint="wss://YOUR_API_ID.execute-api.<region you have deployed the service to>.amazonaws.com/prod",
+            execution_timeout=7200,
+            executor_iam_role_arn="arn:aws:iam::<account-id>:role/<your-role-name>",
+            screenshot_s3_bucket="<your-screenshot-bucket>",
+            browser_session_id=agent_core_browser.session_id,
+            boto_session=boto3.Session(**workflow_boto_session_args),
+        )
+
+        with NovaAct(
+            cdp_endpoint_url=ws_url,
+            cdp_headers=headers,
+            starting_page="https://www.example.com",
+            tty=False,
+            human_input_callbacks=callbacks,
+            workflow=workflow,
+        ) as nova:
+            result = nova.act_get("Complete the purchase, but ask for approval before confirming")
+            print(f"Task completed: {result}")
 ```
 
 ## How It Works
@@ -985,25 +1050,41 @@ class NovaActHumanInputCallbacks(HumanInputCallbacksBase):
 
 def main():
     # Configuration
+    aws_region = "<region you have deployed the service to>"
     executor_endpoint = "wss://YOUR_API_ID.execute-api.<region you have deployed the service to>.amazonaws.com/prod"
     executor_iam_role_arn = "arn:aws:iam::ACCOUNT_ID:role/NovaAgent-HITL-ExecutionRole"
     screenshot_s3_bucket = "your-screenshot-bucket"
-
-    # Create callbacks
-    callbacks = NovaActHumanInputCallbacks(
-        executor_endpoint=executor_endpoint,
-        executor_iam_role_arn=executor_iam_role_arn,
-        screenshot_s3_bucket=screenshot_s3_bucket,
-        browser_session_id="<browser-session-id>",  # From your browser session
-    )
+    workflow_boto_session_args = {"region_name": aws_region}
 
     # Use with Nova Act
-    with NovaAct(
-        starting_page="https://www.example.com",
-        human_input_callbacks=callbacks,
-        nova_act_api_key="your-api-key",
-    ) as nova:
-        nova.act("Complete the purchase, but ask for approval before confirming")
+    with browser_session(aws_region) as agent_core_browser:
+        ws_url, headers = agent_core_browser.generate_ws_headers()
+        with Workflow(
+            boto_session_kwargs=workflow_boto_session_args,
+            model_id="nova-act-latest",
+            workflow_definition_name="nova-act-hitl-example",
+        ) as workflow:
+            callbacks = NovaActHumanInputCallbacks(
+                workflow_run_id=workflow.workflow_run_id,
+                aws_region=aws_region,
+                executor_endpoint=executor_endpoint,
+                execution_timeout=7200,
+                executor_iam_role_arn=executor_iam_role_arn,
+                screenshot_s3_bucket=screenshot_s3_bucket,
+                browser_session_id=agent_core_browser.session_id,
+                boto_session=boto3.Session(**workflow_boto_session_args),
+            )
+
+            with NovaAct(
+                cdp_endpoint_url=ws_url,
+                cdp_headers=headers,
+                starting_page="https://www.example.com",
+                tty=False,
+                human_input_callbacks=callbacks,
+                workflow=workflow,
+            ) as nova:
+                result = nova.act_get("Complete the purchase, but ask for approval before confirming")
+                print(f"Task completed: {result}")
 
 
 if __name__ == "__main__":
