@@ -369,7 +369,7 @@ Use the Approval pattern when you need:
 
 #### Architecture Diagram
 
-![Approval Pattern Architecture](Approval%20HLF.svg)
+![Approval Pattern Architecture](Approval%20High-Level%20Flow.svg)
 
 ---
 
@@ -478,7 +478,7 @@ Unlike the Approval pattern, UI Takeover integrates with **Amazon Bedrock AgentC
 
 #### Architecture Diagram
 
-![UI Takeover Pattern Architecture](UITakeover%20HLF.svg)
+![UI Takeover Pattern Architecture](UITakeover%20High-Level%20Flow.svg)
 
 ---
 
