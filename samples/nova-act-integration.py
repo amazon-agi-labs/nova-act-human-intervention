@@ -60,10 +60,18 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(level
 
 # Test prompts for different use cases
 APPROVAL_PROMPT = """
-Extract the title and subtitle of the page, above the "Guide and Examples" and "Learn more" buttons.
-Ask for human approval, and if approved, print the title and subtitle.
+Click on book your journey.
+Choose Boston AGI Lab as the Origin.
+Choose Ross as the Destination.
+Choose departure date as 21st January 2026.
+Search for the flights.
+In the top most search result, if the Economy
+option price > 10k, please request for approval.
+If approved, please click on select and close
+the page and mark the task as success, else
+just fail.
 """
-APPROVAL_URL = "https://nova.amazon.com/act"
+APPROVAL_URL = "https://nova.amazon.com/act/gym"
 
 UI_TAKEOVER_PROMPT = """Attempt to submit the form. Return if you see 'Verification Success... Hooray!'."""
 UI_TAKEOVER_URL = "https://www.google.com/recaptcha/api2/demo"
