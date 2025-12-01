@@ -53,7 +53,6 @@ from amzn_nova_act_human_intervention_common import (
 from bedrock_agentcore.tools.browser_client import browser_session
 from nova_act.nova_act import HumanInputCallbacksBase, NovaAct, Workflow
 from nova_act.tools.human.interface.human_input_callback import ApprovalResponse, UiTakeoverResponse
-from nova_act.types.workflow import BotoSessionKwargs
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -61,12 +60,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(level
 # Test prompts for different use cases
 APPROVAL_PROMPT = """
 Click on book your journey.
-Choose Boston AGI Lab as the Origin.
-Choose Ross as the Destination.
-Choose departure date as 21st January 2026.
-Search for the flights.
+Find flights from Boston to Wolf on Feb 22nd
 In the top most search result, if the Economy
-option price > 10k, please request for approval.
+option price > 100, please request for approval.
 If approved, please click on select and close
 the page and mark the task as success, else
 just fail.
@@ -325,7 +321,7 @@ def main(
     else:
         logger.info("Using default AWS credential chain (IAM role)")
 
-    workflow_boto_session_args: BotoSessionKwargs = BotoSessionKwargs(region_name=aws_region)
+    workflow_boto_session_args = {"region_name": aws_region}
     prompt, starting_url = (
         (APPROVAL_PROMPT, APPROVAL_URL) if use_case == UseCase.APPROVAL else (UI_TAKEOVER_PROMPT, UI_TAKEOVER_URL)
     )
@@ -353,7 +349,7 @@ def main(
                 ),
                 workflow=workflow,
             ) as nova:
-                result = nova.act(prompt=prompt)
+                result = nova.act_get(prompt=prompt)
                 print(f"Task completed: {result}")
 
 
