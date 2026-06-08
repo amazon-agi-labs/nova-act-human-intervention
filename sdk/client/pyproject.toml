@@ -14,10 +14,13 @@ dependencies = [
     "boto3 >= 1.40.39",
     "botocore >= 1.40.39",
     "pydantic >= 2.10.6",
-    "amzn-nova-act-human-intervention-common",
+    "amzn-nova-act-human-intervention-common @ {root:uri}/../common",
     "tenacity == 9.1.2",
 ]
 requires-python = ">=3.10"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.version]
 path = "src/amzn_nova_act_human_intervention_client/__init__.py"
