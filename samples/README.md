@@ -48,16 +48,10 @@ Before running these examples, ensure you have:
    - It is easier to run patterns as an **AWS Administrator**
    - If you cannot use admin privileges, attach the `NovaAct-HITL-AssumeExecutionRole-<disambiguator>` managed policy to your IAM role/user (see main README deployment section)
    - This policy grants: `sts:AssumeRole` permission for the executor IAM role, which provides `execute-api:ManageConnections`, `execute-api:Invoke`, and `s3:PutObject` (for screenshots)
-3. **Python Dependencies**: Build and install the SDK packages from source, then install remaining dependencies:
+3. **Python Dependencies**: Install the SDK packages from this repository (they are not published on PyPI), then install remaining dependencies:
    ```bash
-   # Build the SDK packages from source (from the repo root)
-   cd sdk/
-   ./build-and-test.sh
-   cd ..
-
-   # Install the locally-built SDK wheels
-   pip install sdk/common/dist/amzn_nova_act_human_intervention_common-1.0.0-py3-none-any.whl
-   pip install sdk/client/dist/amzn_nova_act_human_intervention_client-1.0.0-py3-none-any.whl
+   # From the repo root
+   pip install ./sdk/common ./sdk/client
 
    # Install additional dependencies
    pip install nova-act  # For nova-act-integration.py
@@ -245,16 +239,11 @@ If patterns timeout:
 
 ### Import Errors
 
-If you see import errors, rebuild and reinstall the SDK packages from source:
+If you see import errors, reinstall the SDK packages from this repository:
 
 ```bash
 # From the repo root
-cd sdk/
-./build-and-test.sh
-cd ..
-
-pip install sdk/common/dist/amzn_nova_act_human_intervention_common-1.0.0-py3-none-any.whl
-pip install sdk/client/dist/amzn_nova_act_human_intervention_client-1.0.0-py3-none-any.whl
+pip install ./sdk/common ./sdk/client
 pip install nova-act  # For Nova Act integration
 pip install bedrock-agentcore  # For browser sessions
 ```

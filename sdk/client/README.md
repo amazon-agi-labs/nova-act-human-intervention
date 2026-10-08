@@ -11,13 +11,15 @@ This client library enables automated agents (like Nova Act) to request human in
 
 ## Installation
 
+These packages are not published on PyPI. Install them from a clone of this repository.
+
 ### Basic Installation
 
 For standalone usage (Approval and UI Takeover patterns without Nova Act):
 
 ```bash
-# Install both client and common packages
-pip install amzn-nova-act-human-intervention-client amzn-nova-act-human-intervention-common
+# From the repository root
+pip install ./sdk/common ./sdk/client
 ```
 
 ### Full Installation with Nova Act Integration
@@ -25,8 +27,8 @@ pip install amzn-nova-act-human-intervention-client amzn-nova-act-human-interven
 For complete integration with Nova Act and Bedrock Agent (required for usage examples):
 
 ```bash
-# Install HITL packages
-pip install amzn-nova-act-human-intervention-client amzn-nova-act-human-intervention-common
+# Install HITL packages (from the repository root)
+pip install ./sdk/common ./sdk/client
 
 # Install Nova Act (see https://nova.amazon.com/act for setup instructions)
 pip install nova-act
